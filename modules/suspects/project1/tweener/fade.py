@@ -4,14 +4,15 @@
 
 '''Info Header Start
 Name : fade
-Author : Wieland@AMB-ZEPH15
-Saveorigin : TauCetiV4.toe
-Saveversion : 2022.35320
+Author : Wieland PlusPlusOne@AMB-ZEPH15
+Saveorigin : TauCeti_PresetSystem.toe
+Saveversion : 2023.12000
 Info Header End'''
 import tween_value
 import td
 from dataclasses import dataclass, field
 
+from asyncio import sleep as asyncSleep
 
 import typing
 
@@ -40,7 +41,12 @@ class _tween:
 
 	def Step(self, stepsize:float = None):
 		pass
-		
+	
+	async def Resolve(self):
+		while not self.done:
+			await asyncSleep(0)
+		return
+
 	def Finish(self):
 		pass
 		

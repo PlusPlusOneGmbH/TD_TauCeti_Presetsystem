@@ -3,9 +3,9 @@
 
 '''Info Header Start
 Name : extTweener
-Author : Wieland@AMB-ZEPH15
-Saveorigin : TauCetiV4.toe
-Saveversion : 2023.11880
+Author : Wieland PlusPlusOne@AMB-ZEPH15
+Saveorigin : TauCeti_PresetSystem.toe
+Saveversion : 2023.12000
 Info Header End'''
 
 import fade
@@ -16,6 +16,7 @@ from asyncio import sleep as asyncSleep
 
 from typing import Callable, Union, Hashable, Dict, List, Literal
 from argparse import Namespace
+
 def _emptyCallback( value ):
 	pass
 
@@ -38,10 +39,17 @@ class extTweener:
 		)
 		self.callback 	= self.ownerComp.op('callbackManager')
 
-	def getFadeId(self, parameter:Par):
+		# Bacwards compatible stuff. 
+		# CLearer naming conventions.
+
+		self.StopFade 	= self.StopTween
+		self.getFadeId  = self.getTweenId
+		self.FadeStep	= self.TweenStep
+
+	def getTweenId(self, parameter:Par):
 		return hash(parameter)
 
-	def FadeStep(self, step_in_ms = None):
+	def TweenStep(self, step_in_ms = None):
 		fadesCopy = self.Tweens.copy()
 		for fade_id, tween_object in fadesCopy.items():
 			tween_object.Step(step_in_ms)
@@ -50,8 +58,8 @@ class extTweener:
 
 	def AbsoluteTweens(self, 
 					list_of_tweens:List[fade._tween], 
-					curve = "s", 
-					time=1):
+					curve 	= "s", 
+					time 	= 1):
 		for tween in list_of_tweens:
 			self.AbsoluteTween(
 				tween["par"],
@@ -64,8 +72,8 @@ class extTweener:
 
 	def RelativeTweens(self, 
 					list_of_tweens : List[fade._tween], 
-					curve = "s", 
-					time=1):
+					curve 	= "s", 
+					time	= 1):
 		for tween in list_of_tweens:
 			self.RelativeTween(
 				tween["par"],
@@ -97,22 +105,7 @@ class extTweener:
 		time = difference / speed
 		self.CreateTween(parameter, end, time, curve = curve, delay = delay, callback = callback)
 		return
-	
-	async def CreateTween_Async(self,parameter, 
-					end		:float, 
-					time	:float, 
-					type	:str				= 'fade', 
-					curve	:str				= 's', 
-					mode	:Union[str, ParMode]= 'CONSTANT', 
-					expression	:str			= None, 
-					delay		:float			= 0.0,
-					callback	:Callable		= _emptyCallback,
-					id		:Hashable			= '',  ):
-		tweenObject = self.CreateTween( parameter, end, time, type, curve, mode, expression, delay, callback, id)
-		while not tweenObject.done:
-			await asyncSleep(0)
-		return tweenObject
-		
+
 	def CreateTween(self,parameter, 
 					end		:float, 
 					time	:float, 
@@ -122,7 +115,8 @@ class extTweener:
 					expression	:str			= None, 
 					delay		:float			= 0.0,
 					callback	:Callable		= _emptyCallback,
-					id		:Hashable			= '',  ):
+					id		:Hashable			= '',  ) -> fade._tween:
+		
 		if not isinstance( parameter, Par):
 			raise self.Exceptions.TargetIsNotParameter(f"Invalid Parameterobject {parameter}")
 		
@@ -130,16 +124,19 @@ class extTweener:
 		startValue	:tween_value._tweenValue 	= tween_value.tweenValueFromParameter( parameter )
 
 		fadeClass:fade.fade  	= getattr( fade, type, fade.startsnap )
-		fadeObject 				= fadeClass( parameter, time, startValue, targetValue, interpolation = curve, id = id, _callback = callback) 
-		fadeObject.Delay( delay )
+		tweenOject 				= fadeClass( parameter, time, startValue, targetValue, interpolation = curve, id = id, _callback = callback) 
+		tweenOject.Delay( delay )
 		#self.Tweens[id or self.getFadeId( parameter )] = fadeObject
-		self.Tweens[self.getFadeId( parameter )] = fadeObject
-		fadeObject.Step( stepsize = 0 )
-		return fadeObject
+		self.Tweens[self.getTweenId( parameter )] = tweenOject
+		tweenOject.Step( stepsize = 0 )
+		return tweenOject
 		
 
-	def StopFade(self,par):
-		del self.Tweens[self.getFadeId(par)]
+	def StopTween(self, target: Union[Par, fade._tween]):
+		if isinstance( target, fade._tween):
+			target = target.parameter
+			
+		del self.Tweens[self.getTweenId(target)]
 
 	def StopAllFades(self):
 		self.Tweens = {}
@@ -148,4 +145,5 @@ class extTweener:
 		self.Tweens.clear()
 
 	def PrintFades(self):
+		raise DeprecationWarning("Yeah, please dont.")
 		print(self.Tweens)
