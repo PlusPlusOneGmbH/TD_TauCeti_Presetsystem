@@ -45,6 +45,7 @@ class extTweener:
 		self.StopFade 	= self.StopTween
 		self.getFadeId  = self.getTweenId
 		self.FadeStep	= self.TweenStep
+		self.StopAllFades = self.StopAllTweens
 
 	def getTweenId(self, parameter:Par):
 		return hash(parameter)
@@ -157,7 +158,7 @@ class extTweener:
 			
 		del self.Tweens[self.getTweenId(target)]
 
-	def StopAllFades(self):
+	def StopAllTweens(self):
 		""" Stops all tweens."""
 		self.Tweens = {}
 
