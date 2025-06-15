@@ -84,12 +84,12 @@ class extTweener:
 		]
 	
 	def AbsoluteTween(self, 
-				   parameter:Par, 
-				   end:any, 
-				   time:float, 
-				   curve:Literal["Linear", "s"] = "LinearInterpolation", 
-				   delay:float = 0, 
-				   callback: Callable = _emptyCallback):
+					parameter:Par, 
+					end:any, 
+					time:float, 
+					curve:Literal["Linear", "s"] = "LinearInterpolation", 
+					delay:float = 0, 
+					callback: Callable = _emptyCallback):
 		"""
 			Creates a tween that will resolve in the defines time.
 		"""
@@ -97,12 +97,12 @@ class extTweener:
 		return
 
 	def RelativeTween(self, 
-				   parameter:Par, 
-				   end:any, 
-				   speed:float, 
-				   curve:Literal["Linear", "s"] = "LinearInterpolation", 
-				   delay:float = 0, 
-				   callback: Callable = _emptyCallback):
+					parameter:Par, 
+					end:any, 
+					speed:float, 
+					curve:Literal["Linear", "s"] = "LinearInterpolation", 
+					delay:float = 0, 
+					callback: Callable = _emptyCallback):
 		"""
 			Creates a tween that will resolve with the given peed ( value increment per seconds )
 		"""

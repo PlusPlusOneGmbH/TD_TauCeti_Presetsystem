@@ -10,12 +10,12 @@ __ There should only be one tweener per project. Use GlobalOP-Shortcuts or other
 The tweener offers several ways of creating tweens. All do wrap arround CreateTween as the most important method.
 ```python
 op("Tweener").AbsoluteTween(	   
-                    parameter : Par, 
-				    targetValue : any, 
-				    time : float, 
-				    curve : str            = "LinearInterpolation", 
-				    delay : float          = 0, 
-				    callback : Callable    = _emptyCallback ) -> TweenObject
+					parameter : Par, 
+					targetValue : any, 
+					time : float, 
+					curve : str            = "LinearInterpolation", 
+					delay : float          = 0, 
+					callback : Callable    = _emptyCallback ) -> TweenObject
 # Creates a tween that will resolve in the defines time.
 
 op("Tweener").RelativeTween( 
@@ -34,7 +34,7 @@ Both functions are clearly aimed at fadeable, meaning numeric, parameters. They 
 For nun-numeric parameters the underlying CreateTween is required.
 ```python
 op("Tweener"):CreateTween(
-                    parameter :Par, 
+					parameter :Par, 
 					targetValue	:float, 
 					time	:float, 
 					type	:Literal["fade", "startsnap", "endsnap"] = 'fade', 
