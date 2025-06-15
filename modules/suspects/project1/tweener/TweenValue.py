@@ -1,20 +1,17 @@
-
-
 '''Info Header Start
 Name : tween_value
-Author : Wieland@AMB-ZEPH15
-Saveorigin : TauCetiV4.toe
-Saveversion : 2022.35320
+Author : Wieland PlusPlusOne@AMB-ZEPH15
+Saveorigin : TauCeti_PresetSystem.toe
+Saveversion : 2023.12000
 Info Header End'''
 
 
-import tweener_exceptions
+import Exceptions
 
 from functools import lru_cache
 from typing import Union
 
 par_modes = [parmode.name.upper() for parmode in ParMode._value2member_map_.values()]
-
 
 @lru_cache(maxsize=None)
 def getParamaterTypecast(parameter):
@@ -58,7 +55,7 @@ class staticValue( _tweenValue ):
 def stringifyParmode( mode:ParMode ):
     if isinstance(mode, ParMode): return mode.name.upper()
     if isinstance(mode, str) and mode.upper() in par_modes: return mode.upper()
-    raise tweener_exceptions.InvalidParMode
+    raise Exceptions.InvalidParMode
 
 def tweenValueFromParameter( parameter:Par ):
     if parameter.mode.name =="EXPRESSION": return expressionValue( parameter, parameter.expr )
