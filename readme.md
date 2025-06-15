@@ -64,6 +64,8 @@ Stop() # Stops the tween right where it is and removes it.
 Reset() # Reverses all changes done by the tween and stops it.
 Reverse() # Changes target and startingpoint mid flight. 
 Delay(offset:float) # Reduces the current ime by offset. When at 0, this results in a delay, when above 0 will result in a stepback.
+
+Resolve() #  In async context, await the compleation of the tween, then conitnue.
 ```
 
 
@@ -75,5 +77,32 @@ Tweens : Dict[int, TweenObject] # A dict containing all tweens, keyed by an uniq
 TweensByOp( targetOpartor:OP) # Returns a list of all tweens that are running and pointing at a prameter of the given operator.
 ```
 
+### Example
+Fading in a levelTOP in 1 second.
+```python
+op("Tweener").AbsoluteTween( op("level1").par.opacity, 1, 1)
+```
 
+Awaiting the completion of a tween.
+```python
+await op("Tweener").AbsoluteTween( op("level1").par.opacity, 1, 1).Resolve()
+```
+
+Transition from current value to a refference of an LFO.
+```python
+op("Tweener").CreateTween(
+	op("level1").par.opacity, None, 1, 
+	mode = ParMode.EXPRESSION,
+	expr = "op('lfo1')['chan1']"
+)
+```
+
+A pretty destructive tween.
+```python
+def callback( tweenObject ):
+	tweenObject.Paramater.owner.destroy()
+	
+tweenObject = op("Tweener").AbsoluteTween( op("level1").par.opacity, 1, 1)
+tweenObject.OnDoneCallbacks.append( callback )
+```
 ## TauCeti: TBD
