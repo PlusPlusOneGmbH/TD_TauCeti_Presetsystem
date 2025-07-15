@@ -11,7 +11,7 @@ import TweenValue
 from dataclasses import dataclass, field
 from asyncio import sleep as asyncSleep
 
-import typing
+from typing import Callable, List, Union, Hashable
 
 @dataclass
 class _tween:
@@ -25,14 +25,14 @@ class _tween:
 	startValue		:	TweenValue._tweenValue
 	targetValue		:   TweenValue._tweenValue
 	interpolation	:	str 			= "LinearInterpolation"
-	id				:	str				= ""
+	id				:	Hashable		= ""
 	_currentStep	:	float 			= field( default= 0, repr=False)
 
 	Active			:	bool			= True
-	OnDoneCallbacks :   typing.Callable = field( default_factory = list)
+	OnDoneCallbacks :   List[Callable] 	= field( default_factory = list)
 	
 	# Override
-	def Step(self, stepsize:float = None):
+	def Step(self, stepsize:Union[float, None] = None):
 		pass
 	
 	# Override
@@ -40,7 +40,7 @@ class _tween:
 		pass
 		
 	
-	def _incrementStep(self, stepsize:float):
+	def _incrementStep(self, stepsize:Union[float, None]):
 		stepsize = stepsize or absTime.stepSeconds
 		self._currentStep += stepsize
 		#self.current_step = tdu.clamp( self.current_step + stepsize, 0, self.time )
@@ -69,7 +69,7 @@ class _tween:
 
 	def Stop(self):
 		""" Tops the tween right where it is and removes it. """
-		self.TweenerCOMP.StopTween(self)
+		self.TweenerCOMP.StopTween(self) # type: ignore   Circular Refference, so this has to stay.
 
 
 	def Reset(self):
@@ -98,10 +98,10 @@ class _tween:
 class fade( _tween ):
 	def Step(self, stepsize = None):
 		self._incrementStep(stepsize)
-		curves 				= op("curves_repo").Repo
+		curves 				= op("curves_repo").Repo # type: ignore Until I have proper package management this has to be taken for granted.
 		curve_value 		= curves.GetValue( self._currentStep, self.time, self.interpolation )
-		start_evaluated 	= self.startValue.eval()
-		target_evaluated 	= self.targetValue.eval()
+		start_evaluated:float	= self.startValue.eval()
+		target_evaluated:float 	= self.targetValue.eval()
 		difference 			= target_evaluated - start_evaluated
 		new_value 			= start_evaluated + difference * curve_value
 		self.parameter.val = new_value
@@ -115,7 +115,7 @@ class fade( _tween ):
 
 class endsnap( _tween ):
 
-	def Step(self, stepsize:float = None):
+	def Step(self, stepsize = None):
 		
 		self._incrementStep(stepsize)
 		if self.done: self.Finish()
@@ -128,7 +128,7 @@ class endsnap( _tween ):
 
 class startsnap( _tween ):
 
-	def Step(self, stepsize:float = None):
+	def Step(self, stepsize = None):
 		self.targetValue.assignToPar( self.parameter )
 		self._incrementStep(stepsize)
 		if self.done: self.Finish()

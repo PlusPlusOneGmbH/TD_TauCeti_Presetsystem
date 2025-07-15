@@ -5,13 +5,15 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
-
 import Exceptions
 
 from functools import lru_cache
 from typing import Union
+from abc import abstractmethod, ABCMeta
 
 par_modes = [parmode.name.upper() for parmode in ParMode._value2member_map_.values()]
+TweenableValue = Union[int, float]
+
 
 @lru_cache(maxsize=None)
 def getParamaterTypecast(parameter):
@@ -19,14 +21,16 @@ def getParamaterTypecast(parameter):
     if parameter.style == "Toggle": return lambda value: bool(float(value))
     return type( parameter.val )
 
-class _tweenValue:
-    def eval(self):
+class _tweenValue(metaclass = ABCMeta):
+    @abstractmethod
+    def eval(self) -> float:
         pass
-
+    
+    @abstractmethod
     def assignToPar(self, parameter:Par):
         pass
 
-class expressionValue( _tweenValue ):
+class ExpressionValue( _tweenValue ):
     def __init__(self, parameter:Par , expression_string:str):
         self.expressionString = expression_string
         self.expressionFunction = lambda : parameter.owner.evalExpression( expression_string )
@@ -39,8 +43,8 @@ class expressionValue( _tweenValue ):
         parameter.expr = self.expressionString
         
 
-class staticValue( _tweenValue ):
-    def __init__(self, parameter:Par, value:any):
+class StaticValue( _tweenValue ):
+    def __init__(self, parameter:Par, value:TweenableValue):
         self.value = getParamaterTypecast( parameter )(value)
 
     def eval(self):
@@ -58,11 +62,11 @@ def stringifyParmode( mode:ParMode ):
     raise Exceptions.InvalidParMode
 
 def tweenValueFromParameter( parameter:Par ):
-    if parameter.mode.name =="EXPRESSION": return expressionValue( parameter, parameter.expr )
-    return staticValue( parameter, parameter.eval() )
+    if parameter.mode.name =="EXPRESSION": return ExpressionValue( parameter, parameter.expr ) # type: ignore WTF, why does it think the classInstanciator takes 2 arguments?
+    return StaticValue( parameter, parameter.eval() ) # type: ignore
 
-def tweenValueFromArguments( parameter:Par, mode:Union[str, ParMode], expression:str, value:any):
-    if stringifyParmode(mode) =="EXPRESSION" and expression: return expressionValue( parameter, expression )
-    return staticValue( parameter, value )
+def tweenValueFromArguments( parameter:Par, mode:Union[str, ParMode], expression:Union[str, None], value:TweenableValue):
+    if stringifyParmode(mode) =="EXPRESSION" and expression: return ExpressionValue( parameter, expression ) # type: ignore
+    return StaticValue( parameter, value ) # type: ignore
     
 

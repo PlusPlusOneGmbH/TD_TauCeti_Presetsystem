@@ -14,13 +14,37 @@ import Exceptions
 
 from asyncio import sleep as asyncSleep
 
-from typing import Callable, Union, Hashable, Dict, List, Literal, Type
+from typing import Callable, Union, Hashable, Dict, List, Literal, Type, TypedDict, Optional, cast
 from argparse import Namespace
+
+
+
 
 def _emptyCallback( value:TweenObject._tween ):
 	pass
 
 _type = type
+PotentialCurves = Union[ str, Literal["s", "LinearInterpolation", "QuadraticEaseIn", "QuadraticEaseOut", "BackEaseIn", "BounceEaseIn"] ]
+
+from TweenValue import TweenableValue
+
+
+class AbsoluteTweenDefinition(TypedDict):
+	par			: Par
+	end			: TweenableValue
+	time 		: Optional[float]
+	curve 		: Optional[PotentialCurves]
+	delay 		: Optional[float]
+	callback 	: Optional[Callable]
+
+class RelativeeTweenDefinition(TypedDict):
+	par			: Par
+	end			: TweenableValue
+	speed 		: Optional[float]
+	curve 		: Optional[PotentialCurves]
+	delay 		: Optional[float]
+	callback 	: Optional[Callable]
+
 
 class extTweener:
 
@@ -33,8 +57,8 @@ class extTweener:
 			Exceptions 	= Exceptions
 		)
 		self.Constructor = Namespace(
-			Expression 	= TweenValue.expressionValue,
-			Static 		= TweenValue.staticValue,
+			Expression 	= TweenValue.ExpressionValue,
+			Static 		= TweenValue.StaticValue,
 			FromPar		= TweenValue.tweenValueFromParameter
 		)
 		self.callback 	= self.ownerComp.op('callbackManager')
@@ -62,62 +86,76 @@ class extTweener:
 			if tween_object.done: del self.Tweens[ fade_id ]
 		
 
-	def AbsoluteTweens(self, list_of_tweens:List[Dict], curve 	= "s", time 	= 1) -> List[TweenObject._tween]:
+	def AbsoluteTweens(self, listOfTweenDefinition:List[AbsoluteTweenDefinition], curve:PotentialCurves	= "s", time 	= 1) -> List[TweenObject._tween]:
 		"""
 			Calls AbsoluteTween for each element of the given List of dicts
 			which needs at least par and end memeber. otional time, curve, delay nd callback
 		"""
 		return [
-			self.AbsoluteTween( tweenDict["par"], tweenDict["end"], tweenDict.get("time", time), **tweenDict )
-			for tweenDict in list_of_tweens 
+			self.AbsoluteTween( 
+				tweenDict["par"], 
+				tweenDict["end"], 
+				cast(float, tweenDict.get("time", time)), # This is a bandaid. Need to patch this up.
+				curve = tweenDict.get("curve", None) or curve,
+				delay = cast( float, tweenDict.get("delay", 0) ), # And here we go with type gymnasticts....
+				callback= tweenDict.get("callback", None) or _emptyCallback,
+			)
+			for tweenDict in listOfTweenDefinition 
 		]
 			
 
-	def RelativeTweens(self, list_of_tweens : List[Dict], curve 	= "s", time	= 1):
+	def RelativeTweens(self, listOfTweenDefinition : List[RelativeeTweenDefinition], curve:PotentialCurves 	= "s", speed	= 1):
 		"""
 			Calls AbsoluteTween for each element of the given List of dicts
 			which needs at least par and end memeber. otional time, curve, delay nd callback
 		"""
 		return [
-			self.RelativeTween( tweenDict["par"], tweenDict["end"], tweenDict.get("time", time), **tweenDict )
-			for tweenDict in list_of_tweens 
+			self.RelativeTween( 
+				tweenDict["par"], 
+				tweenDict["end"], 
+				cast(float, tweenDict.get("speed", speed)), # This is a bandaid. Need to patch this up.
+				curve = tweenDict.get("curve", None) or curve,
+				delay = cast( float, tweenDict.get("delay", 0) ), # And here we go with type gymnasticts....
+				callback= tweenDict.get("callback", None) or _emptyCallback,
+			)
+			for tweenDict in listOfTweenDefinition 
 		]
 	
 	def AbsoluteTween(self, 
 					parameter:Par, 
-					end:any, 
+					end:TweenableValue, 
 					time:float, 
-					curve:Literal["Linear", "s"] = "LinearInterpolation", 
+					curve:PotentialCurves = "LinearInterpolation", 
 					delay:float = 0, 
-					callback: Callable = _emptyCallback):
+					callback: Callable = _emptyCallback) -> TweenObject._tween:
 		"""
 			Creates a tween that will resolve in the defines time.
 		"""
-		self.CreateTween(parameter, end, time, curve = curve, delay = delay, callback = callback)
-		return
+		return self.CreateTween(parameter, end, time, curve = curve, delay = delay, callback = callback)
+		
 
 	def RelativeTween(self, 
 					parameter:Par, 
-					end:any, 
+					end:TweenableValue, 
 					speed:float, 
-					curve:Literal["Linear", "s"] = "LinearInterpolation", 
+					curve:PotentialCurves = "LinearInterpolation", 
 					delay:float = 0, 
-					callback: Callable = _emptyCallback):
+					callback: Callable = _emptyCallback) -> TweenObject._tween:
 		"""
 			Creates a tween that will resolve with the given peed ( value increment per seconds )
 		"""
 		difference = abs(end - parameter.eval())
 		time = difference / speed
-		self.CreateTween(parameter, end, time, curve = curve, delay = delay, callback = callback)
-		return
+		return self.CreateTween(parameter, end, time, curve = curve, delay = delay, callback = callback)
+		
 
 	def CreateTween(self,parameter, 
-					end		:float, 
+					end		:TweenableValue, 
 					time	:float, 
 					type	:Literal["fade", "startsnap", "endsnap"] = 'fade', 
-					curve	:str				= "LinearInterpolation", 
+					curve	:PotentialCurves	= "LinearInterpolation", 
 					mode	:Union[str, ParMode]= 'CONSTANT', 
-					expression	:str			= None, 
+					expression	:Union[str, None] = None, 
 					delay		:float			= 0.0,
 					callback	:Callable		= _emptyCallback,
 					id		:Hashable			= '',  ) -> TweenObject._tween:
@@ -125,7 +163,7 @@ class extTweener:
 			Creates the given tween object based on the definition. 
 		"""
 		if not isinstance( parameter, Par):
-			raise self.Exceptions.TargetIsNotParameter(f"Invalid Parameterobject {parameter}")
+			raise Exceptions.TargetIsNotParameter(f"Invalid Parameterobject {parameter}")
 		
 		targetValue	:TweenValue._tweenValue 	= TweenValue.tweenValueFromArguments( parameter, mode, expression, end )
 		startValue	:TweenValue._tweenValue 	= TweenValue.tweenValueFromParameter( parameter )
