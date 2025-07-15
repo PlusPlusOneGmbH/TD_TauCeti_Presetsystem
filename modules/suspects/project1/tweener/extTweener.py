@@ -14,7 +14,7 @@ import Exceptions
 
 from asyncio import sleep as asyncSleep
 
-from typing import Callable, Union, Hashable, Dict, List, Literal, Type, TypedDict, Optional, cast
+from typing import Callable, Union, Hashable, Dict, List, Literal, Type, TypedDict, NotRequired, cast
 from argparse import Namespace
 
 
@@ -32,18 +32,18 @@ from TweenValue import TweenableValue
 class AbsoluteTweenDefinition(TypedDict):
 	par			: Par
 	end			: TweenableValue
-	time 		: Optional[float]
-	curve 		: Optional[PotentialCurves]
-	delay 		: Optional[float]
-	callback 	: Optional[Callable]
+	time 		: NotRequired[float]
+	curve 		: NotRequired[PotentialCurves]
+	delay 		: NotRequired[float]
+	callback 	: NotRequired[Callable]
 
 class RelativeeTweenDefinition(TypedDict):
 	par			: Par
 	end			: TweenableValue
-	speed 		: Optional[float]
-	curve 		: Optional[PotentialCurves]
-	delay 		: Optional[float]
-	callback 	: Optional[Callable]
+	speed 		: NotRequired[float]
+	curve 		: NotRequired[PotentialCurves]
+	delay 		: NotRequired[float]
+	callback 	: NotRequired[Callable]
 
 
 class extTweener:
