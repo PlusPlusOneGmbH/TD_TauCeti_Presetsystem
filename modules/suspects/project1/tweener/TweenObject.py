@@ -12,9 +12,10 @@ from dataclasses import dataclass, field
 from asyncio import sleep as asyncSleep
 
 from typing import Callable, List, Union, Hashable
+from abc import ABCMeta, abstractmethod
 
 @dataclass
-class _tween:
+class _tween(metaclass = ABCMeta):
 	"""
 		A tween component being used to programatically move between parameter states.
 		Cntrolled via the TweenerCOMP Extension.
@@ -31,11 +32,11 @@ class _tween:
 	Active			:	bool			= True
 	OnDoneCallbacks :   List[Callable] 	= field( default_factory = list)
 	
-	# Override
+	@abstractmethod
 	def Step(self, stepsize:Union[float, None] = None):
 		pass
 	
-	# Override
+	@abstractmethod
 	def Finish(self):
 		pass
 		

@@ -19,13 +19,12 @@ else:
 class TestParDef:
     Float1: Par
     Float2: Par
-    
+
 class TestComp:
     par : TestParDef
 
 tweener = cast( extTweener, op("Tweener") )
 parComp = cast( Union[TestComp, COMP], op("parameter1") )
-
 
 # Test Routine
 
@@ -33,6 +32,7 @@ async def naiveTweenerTest():
     parComp.par.Float1.val = 0
     parComp.par.Float2.val = 0
     # Test awaitability
+    
     await tweener.AbsoluteTween(
         parComp.par.Float1,
         1,

@@ -95,9 +95,9 @@ class extTweener:
 			self.AbsoluteTween( 
 				tweenDict["par"], 
 				tweenDict["end"], 
-				cast(float, tweenDict.get("time", time)), # This is a bandaid. Need to patch this up.
+				tweenDict.get("time", time), 
 				curve = tweenDict.get("curve", None) or curve,
-				delay = cast( float, tweenDict.get("delay", 0) ), # And here we go with type gymnasticts....
+				delay = tweenDict.get("delay", 0), 
 				callback= tweenDict.get("callback", None) or _emptyCallback,
 			)
 			for tweenDict in listOfTweenDefinition 
@@ -113,9 +113,9 @@ class extTweener:
 			self.RelativeTween( 
 				tweenDict["par"], 
 				tweenDict["end"], 
-				cast(float, tweenDict.get("speed", speed)), # This is a bandaid. Need to patch this up.
+				tweenDict.get("speed", speed), 
 				curve = tweenDict.get("curve", None) or curve,
-				delay = cast( float, tweenDict.get("delay", 0) ), # And here we go with type gymnasticts....
+				delay = tweenDict.get("delay", 0),
 				callback= tweenDict.get("callback", None) or _emptyCallback,
 			)
 			for tweenDict in listOfTweenDefinition 
