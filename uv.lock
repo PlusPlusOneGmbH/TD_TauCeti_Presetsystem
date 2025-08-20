@@ -1,0 +1,8 @@
+version = 1
+revision = 2
+requires-python = ">=3.11"
+
+[[package]]
+name = "tdp-tauceti"
+version = "4.0.1"
+source = { editable = "." }

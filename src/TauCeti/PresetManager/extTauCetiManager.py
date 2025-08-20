@@ -1,8 +1,9 @@
+
 '''Info Header Start
 Name : extTauCetiManager
 Author : Wieland PlusPlusOne@AMB-ZEPH15
-Saveorigin : TauCetiV4.toe
-Saveversion : 2023.11880
+Saveorigin : TauCeti_PresetSystem.toe
+Saveversion : 2023.12000
 Info Header End'''
 
 TDFunctions = op.TDModules.mod.TDFunctions

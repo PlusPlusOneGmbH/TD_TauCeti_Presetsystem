@@ -1,0 +1,20 @@
+[project]
+name = "tdp-tauceti"
+version = "4.0.1"
+description = "A collection of components for parameter presets in td."
+readme = "README.md"
+authors = [
+    { name = "Wieland Hilker", email = "Wieland@PlusPlus.One" }
+]
+requires-python = ">=3.11"
+dependencies = []
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+"*" = ["*.tox"]

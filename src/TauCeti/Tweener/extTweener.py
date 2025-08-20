@@ -1,6 +1,9 @@
 
 
 
+
+
+
 '''Info Header Start
 Name : extTweener
 Author : Wieland PlusPlusOne@AMB-ZEPH15
@@ -74,7 +77,7 @@ class extTweener:
 	def getTweenId(self, parameter:Par):
 		return hash(parameter)
 
-	def TweenStep(self, step_in_ms = None):
+	def TweenStep(self, step_in_ms:float = None):
 		"""
 			Progresses all active tweens for the given time. 
 			Should be called from the internal clock but can be also run from an external source if wished.
