@@ -6,7 +6,7 @@ __NOTE: This repo can be installed directly using PIP. There are still some head
 ## Tweener
 The tweener is the heart of the whole system and a great component in itself. It allows for programmatic creation and management of Tweens, transitions between states of a parameter. Be it Expression or Static, fadeable and non-fadeable parameters, the Tweener should be able to handle them.
 
-__ There should only be one tweener per project. Use GlobalOP-Shortcuts or other means of dependency management __
+__There should only be one tweener per project. Use GlobalOP-Shortcuts or other means of dependency management__
 
 
 The tweener offers several ways of creating tweens. All do wrap arround CreateTween as the most important method.
