@@ -1,6 +1,8 @@
 # TauCeti PresetSystem + Tweener
 Highly customisable and setup agnostic system for presets management in TouchDesigner
 
+__NOTE: This repo can be installed directly using PIP. There are still some headaches but this is the future.__
+
 ## Tweener
 The tweener is the heart of the whole system and a great component in itself. It allows for programmatic creation and management of Tweens, transitions between states of a parameter. Be it Expression or Static, fadeable and non-fadeable parameters, the Tweener should be able to handle them.
 
