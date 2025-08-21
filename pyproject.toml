@@ -1,6 +1,6 @@
 [project]
 name = "tdp-tauceti"
-version = "4.0.1"
+version = "4.0.2"
 description = "A collection of components for parameter presets in td."
 readme = "README.md"
 authors = [
@@ -18,3 +18,19 @@ where = ["src"]
 
 [tool.setuptools.package-data]
 "*" = ["*.tox"]
+
+[tool.uv.sources]
+touchlaunch = { git = "https://github.com/PlusPlusOneGmbH/Py_TD_Launch" }
+
+[dependency-groups]
+dev = [
+    "touchlaunch",
+]
+
+
+[tool.touchdesigner]
+# Define the projectfile. Should sit in the root-dir of the project.
+projectfile = "TauCeti_PresetSystem.toe"
+
+# Defines the behaviour how the TD-Install should be searched for 
+enforce-version="closest-build"
