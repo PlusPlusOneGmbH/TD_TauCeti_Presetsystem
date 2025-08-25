@@ -1,4 +1,3 @@
-
 '''Info Header Start
 Name : extTauCetiManager
 Author : Wieland PlusPlusOne@AMB-ZEPH15
@@ -7,6 +6,7 @@ Saveversion : 2023.12000
 Info Header End'''
 
 TDFunctions = op.TDModules.mod.TDFunctions
+
 import uuid
 from extParStack import InvalidOperator
 from typing import Literal, Union
@@ -27,6 +27,11 @@ def snakeCaseToCamelcase( classObject ):
 class PresetDoesNotExist(Exception):
 	pass
 
+from touchutilcollection.operator import ensure_tox
+from TauCeti import Tweener
+from TauCeti.Tweener.extTweener import extTweener
+from typing import cast
+
 class extTauCetiManager:
 
 	def __init__(self, ownerComp):
@@ -34,7 +39,9 @@ class extTauCetiManager:
 		self.ownerComp 		= ownerComp
 		self.stack     		= self.ownerComp.op('stack')
 		# self.tweener   		= self.ownerComp.op('olib_dependancy').Get_Component()
-		self.tweener 		= self.ownerComp.op("remote_dependency").GetGlobalComponent()
+		# self.tweener 		= self.ownerComp.op("remote_dependency").GetGlobalComponent()
+
+		self.tweener		= cast(extTweener,  op("/sys/utils/tweener") or ensure_tox( "/sys/utils/tweener", Tweener.ToxFile ) )
 		self.modeler 		= self.ownerComp.op('modeler')
 		self.preview 		= self.ownerComp.op("previews")
 		self.logger 		= self.ownerComp.op("logger")

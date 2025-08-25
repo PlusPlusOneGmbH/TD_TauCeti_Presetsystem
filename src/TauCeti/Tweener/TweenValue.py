@@ -1,6 +1,5 @@
 
 
-
 '''Info Header Start
 Name : tween_value
 Author : Wieland PlusPlusOne@AMB-ZEPH15
@@ -8,13 +7,25 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
-import Exceptions
+from td import * # pyright: ignore[reportMissingImports]
+
+from TauCeti.Tweener import Exceptions
 
 from functools import lru_cache
-from typing import Union
+from typing import Union, Literal
 from abc import abstractmethod, ABCMeta
+from enum import Enum
+
+# Weirldy, ParMode seems to not be part of the td namespace....
+class ParMode(Enum):
+    CONSTANT = "CONSTANT"
+    EXPRESSION = "EXPRESSION"
+    EXPORT = "EXPORT"
+    BIND = "BIND"
 
 par_modes = [parmode.name.upper() for parmode in ParMode._value2member_map_.values()]
+
+
 TweenableValue = Union[int, float]
 
 

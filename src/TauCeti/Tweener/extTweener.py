@@ -3,7 +3,6 @@
 
 
 
-
 '''Info Header Start
 Name : extTweener
 Author : Wieland PlusPlusOne@AMB-ZEPH15
@@ -11,15 +10,29 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
-import TweenObject
-import TweenValue
-import Exceptions
+# This does not work. Relative import neither.
+# I think this might be a limit, at least during development. 
+#import TweenObject
+#import TweenValue
+#import Exceptions
+
+# This works, but now we are loosing the automatix reload of the parent extension.
+
+# To be evaluated!
+
+from td import * # pyright: ignore[reportMissingImports]
+
+from TauCeti.Tweener import TweenObject
+from TauCeti.Tweener import TweenValue
+from TauCeti.Tweener import Exceptions
+
+# This is idiotic...
+ParMode = TweenValue.ParMode
 
 from asyncio import sleep as asyncSleep
 
 from typing import Callable, Union, Hashable, Dict, List, Literal, Type, TypedDict, NotRequired, cast
 from argparse import Namespace
-
 
 
 
@@ -29,8 +42,8 @@ def _emptyCallback( value:TweenObject._tween ):
 _type = type
 PotentialCurves = Union[ str, Literal["s", "LinearInterpolation", "QuadraticEaseIn", "QuadraticEaseOut", "BackEaseIn", "BounceEaseIn"] ]
 
-from TweenValue import TweenableValue
-
+# from TweenValue import TweenableValue
+TweenableValue = TweenValue.TweenableValue
 
 class AbsoluteTweenDefinition(TypedDict):
 	par			: Par
