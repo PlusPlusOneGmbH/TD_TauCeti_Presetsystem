@@ -7,7 +7,9 @@ authors = [
     { name = "Wieland Hilker", email = "Wieland@PlusPlus.One" }
 ]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "touchutilcollection",
+]
 
 [build-system]
 requires = ["setuptools>=61.0"]
@@ -21,6 +23,7 @@ where = ["src"]
 
 [tool.uv.sources]
 touchlaunch = { git = "https://github.com/PlusPlusOneGmbH/Py_TD_Launch" }
+touchutilcollection = { git = "https://github.com/PlusPlusOneGmbH/Py_TouchUtilCollection" }
 
 [dependency-groups]
 dev = [

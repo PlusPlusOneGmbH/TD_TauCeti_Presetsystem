@@ -15,6 +15,9 @@ wheels = [
 name = "tdp-tauceti"
 version = "4.0.2"
 source = { editable = "." }
+dependencies = [
+    { name = "touchutilcollection" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -22,6 +25,7 @@ dev = [
 ]
 
 [package.metadata]
+requires-dist = [{ name = "touchutilcollection", git = "https://github.com/PlusPlusOneGmbH/Py_TouchUtilCollection" }]
 
 [package.metadata.requires-dev]
 dev = [{ name = "touchlaunch", git = "https://github.com/PlusPlusOneGmbH/Py_TD_Launch" }]
@@ -33,3 +37,8 @@ source = { git = "https://github.com/PlusPlusOneGmbH/Py_TD_Launch#b0882985d7563a
 dependencies = [
     { name = "python-dotenv" },
 ]
+
+[[package]]
+name = "touchutilcollection"
+version = "0.3.0"
+source = { git = "https://github.com/PlusPlusOneGmbH/Py_TouchUtilCollection#b000dba307e412631723d4057820d201cc31a18d" }
