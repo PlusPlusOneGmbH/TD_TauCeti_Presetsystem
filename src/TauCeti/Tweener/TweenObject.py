@@ -8,9 +8,7 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
-from td import * # pyright: ignore[reportMissingImports]
-
-from TauCeti.Tweener import TweenValue
+import TweenValue
 
 from dataclasses import dataclass, field
 from asyncio import sleep as asyncSleep

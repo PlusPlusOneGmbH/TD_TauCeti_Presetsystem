@@ -29,7 +29,7 @@ class PresetDoesNotExist(Exception):
 
 from touchutilcollection.operator import ensure_tox
 from TauCeti import Tweener
-from TauCeti.Tweener.extTweener import extTweener
+
 from typing import cast
 
 class extTauCetiManager:
@@ -41,7 +41,10 @@ class extTauCetiManager:
 		# self.tweener   		= self.ownerComp.op('olib_dependancy').Get_Component()
 		# self.tweener 		= self.ownerComp.op("remote_dependency").GetGlobalComponent()
 
-		self.tweener		= cast(extTweener,  op("/sys/utils/tweener") or ensure_tox( "/sys/utils/tweener", Tweener.ToxFile ) )
+		self.tweener		= cast(
+			Tweener.CompTyping,  
+			op("/sys/utils/tweener") or ensure_tox( "/sys/utils/tweener", Tweener.ToxFile ) 
+		)
 		self.modeler 		= self.ownerComp.op('modeler')
 		self.preview 		= self.ownerComp.op("previews")
 		self.logger 		= self.ownerComp.op("logger")

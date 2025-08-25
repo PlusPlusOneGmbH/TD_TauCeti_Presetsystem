@@ -10,24 +10,11 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
-# This does not work. Relative import neither.
-# I think this might be a limit, at least during development. 
-#import TweenObject
-#import TweenValue
-#import Exceptions
-
-# This works, but now we are loosing the automatix reload of the parent extension.
-
-# To be evaluated!
-
 from td import * # pyright: ignore[reportMissingImports]
 
-from TauCeti.Tweener import TweenObject
-from TauCeti.Tweener import TweenValue
-from TauCeti.Tweener import Exceptions
-
-# This is idiotic...
-ParMode = TweenValue.ParMode
+import TweenObject
+import TweenValue
+import Exceptions
 
 from asyncio import sleep as asyncSleep
 
