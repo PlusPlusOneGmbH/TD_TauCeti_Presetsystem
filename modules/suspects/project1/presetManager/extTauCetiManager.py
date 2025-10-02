@@ -1,8 +1,8 @@
 '''Info Header Start
 Name : extTauCetiManager
 Author : Wieland PlusPlusOne@AMB-ZEPH15
-Saveorigin : TauCetiV4.toe
-Saveversion : 2023.11880
+Saveorigin : TauCeti_PresetSystem.toe
+Saveversion : 2023.12000
 Info Header End'''
 
 TDFunctions = op.TDModules.mod.TDFunctions
@@ -44,7 +44,7 @@ class extTauCetiManager:
 
 	@property
 	def preset_folder(self):
-		return self.ownerComp.op("repo_maker").Repo
+		return self.ownerComp.op("Presetfolder_RepoMaker").Repo
 
 	def Find_Presets(self, name:str="", tag:str="") -> list[str]:
 		"""

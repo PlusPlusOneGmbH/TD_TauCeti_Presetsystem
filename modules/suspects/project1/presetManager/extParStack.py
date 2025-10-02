@@ -1,8 +1,8 @@
 '''Info Header Start
 Name : extParStack
-Author : Wieland@AMB-ZEPH15
-Saveorigin : TauCetiV4.toe
-Saveversion : 2022.35320
+Author : Wieland PlusPlusOne@AMB-ZEPH15
+Saveorigin : TauCeti_PresetSystem.toe
+Saveversion : 2023.12000
 Info Header End'''
 
 import ParUtils
@@ -67,20 +67,17 @@ class extParStack:
 
 	
 	def Add_Par(self, parameter, id_function = lambda parameter: f"{parameter.owner.path}_{parameter.name}", preload = False, fade_type = ""):
-		id = id_function( parameter )
-		if self.stack_table.row( id ): return
-
-		path = self.get_path( parameter.owner )
-		parameter_name = parameter.name
-		preload = False
-		fade_type = fade_type if fade_type else self.get_fade_type( parameter )
-		self.stack_table.appendRow( 
-			[ 	id,
-			 	path,
-			 	parameter_name,
-				preload,
-				fade_type ]
-		)
+		for item in self.ownerComp.op("Stack_RepoMaker").Repo.seq.Items:
+			if item.par.Parameter.eval() == parameter or item.par.Operator.eval() is None: 
+				item_block = item
+				break
+			continue
+		else:
+			item_block = self.ownerComp.op("Stack_RepoMaker").Repo.seq.Items.insertBlock(0)
+		
+		item_block.par.Operator.val = parameter.owner
+		item_block.par.Parname.val = parameter.name
+		item_block.par.Type.val = fade_type if fade_type else self.get_fade_type( parameter )
 	
 	def Get_Stack_Element_Dict(self, index):
 		row = self.stack_table.row( index )
