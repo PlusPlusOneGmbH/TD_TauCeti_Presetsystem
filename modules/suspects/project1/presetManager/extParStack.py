@@ -31,6 +31,10 @@ class extParStack:
 	@property 
 	def relation(self):
 		return self.ownerComp.par.Pathrelation.eval()
+	
+	@property
+	def items(self):
+		return self.ownerComp.op("Stack_RepoMaker").Repo.seq.Items
 
 	def get_par_attr(self, op_path, par_name):
 		return getattr( self.get_op_from_path(op_path).par, par_name)
@@ -41,7 +45,7 @@ class extParStack:
 	def get_path(self, operator):
 	
 		if self.relation == "Relative":
-			return self.ownerComp.relativePath( operator )
+			return self.ownerComp.op("Stack_RepoMaker").Repo.relativePath( operator )
 		return operator.path
 
 	def get_fade_type(self, par):
@@ -66,37 +70,37 @@ class extParStack:
 				self.Add_Par( parameter )
 
 	
-	def Add_Par(self, parameter, id_function = lambda parameter: f"{parameter.owner.path}_{parameter.name}", preload = False, fade_type = ""):
-		for item in self.ownerComp.op("Stack_RepoMaker").Repo.seq.Items:
+	def Add_Par(self, parameter, preload = False, fade_type = ""):
+		for item in self.items:
 			if item.par.Parameter.eval() == parameter or item.par.Operator.eval() is None: 
 				item_block = item
 				break
 			continue
 		else:
-			item_block = self.ownerComp.op("Stack_RepoMaker").Repo.seq.Items.insertBlock(0)
+			item_block = self.items.insertBlock(0)
 		
-		item_block.par.Operator.val = parameter.owner
+		item_block.par.Operator.val = self.get_path(parameter.owner)
+		item_block.par.Preload.val = preload
 		item_block.par.Parname.val = parameter.name
 		item_block.par.Type.val = fade_type if fade_type else self.get_fade_type( parameter )
 	
 	def Get_Stack_Element_Dict(self, index):
-		row = self.stack_table.row( index )
-
-		if not row: return None
-		parameter = self.get_par( row[1].val, row[2].val)
+		block = self.items[index]
+		parameter = block.par.Parameter.eval()
 		if parameter is None: return self.Remove_Row_From_Stack( index )
 		return {
-			"id"		: row[0].val,
-			"type" 		: row[4].val,
-			"preload" 	: row[3].val,
-			"par" 		: parameter,
-			"val" 		: ParUtils.parse( parameter ) if (parameter.mode != ParMode.EXPRESSION) else 0,
-			"parName" 	: parameter.name,
-			"parOwner"	: row[1].val,
-			"mode"		: parameter.mode.name,
-			"expression": parameter.expr if (parameter.mode == ParMode.EXPRESSION) else None,
-			"relation"	: self.relation,
+			# "id"		: "Deprecated",
+			"Type" 		: block.par.Type.eval(),
+			"Preload" 	: block.par.Preload.eval(),
+			# "par" 		: parameter,
+			"Value" 		: ParUtils.parse( parameter ) if (parameter.mode != ParMode.EXPRESSION) else 0,
+			"Parname" 	: block.par.Parname.eval(),
+			"Operator"	: block.par.Operator.eval(),
+			"Mode"		: parameter.mode.name,
+			"Expression": parameter.expr if (parameter.mode == ParMode.EXPRESSION) else None,
+			# "relation"	: self.relation,
 		}
+	
 	def Refresh_Stack(self):
 		temp_list = self.Get_Stack_Dict_List()
 		self.Clear_Stack()
@@ -105,24 +109,24 @@ class extParStack:
 		return
 
 	def Get_Stack_Dict_List(self):
-		return [ self.Get_Stack_Element_Dict(index) for index in range(1, self.stack_table.numRows)]
+		return [ self.Get_Stack_Element_Dict(index) for index in range(0, self.items.numBlocks)]
 
 	def Remove_Row_From_Stack(self, index):
-		self.stack_table.deleteRow( index )
+		if self.items.numBlocks > 1:
+			self.items.destroyBlock( index )
+		else:
+			block = self.items[0]
+			block.par.Operator.val = ""
+			block.par.Parname.val = ""
 
 	def Clear_Stack(self):
-		self.stack_table.clear( keepFirstRow = True)
+		self.items.numBlocks = 0
 	
 	def Change_Preload(self, index):
-		self.stack_table[index, 3].val = not eval( self.stack_table[index, 3].val )
+		self.items[index].par.Preload.val = not self.items[index].par.Preload.eval() 
 
 	def Change_Fadetype(self, index):
-		fade_list = self.fade_types.copy()
-
-		parameter = self.get_par( self.stack_table[index, 1].val, 
-								  self.stack_table[index, 2].val)
-		if not parameter.style in self.fadeable: fade_list.remove( "fade" )
-		type_index = fade_list.index( self.stack_table[index, 4].val )
-		type_index += 1
-		type_index %= len( fade_list )
-		self.stack_table[index, 4].val = fade_list[ type_index ] 
+		self.items[index].par.Type.menuIndex = (
+			self.items[index].par.Type.menuIndex+1
+			) % len( self.items[index].par.Type.menuNames )
+		

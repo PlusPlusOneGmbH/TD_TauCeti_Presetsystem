@@ -165,10 +165,15 @@ class extTweener:
 		if not isinstance( parameter, Par):
 			raise Exceptions.TargetIsNotParameter(f"Invalid Parameterobject {parameter}")
 		
+
+		if isinstance( parameter.default, (int, float)):
+			end = float( end ) # If we get a str value (or similiar) as the target value, we can make sure that we are fading non the less. Not perfect :()
+
+
 		targetValue	:TweenValue._tweenValue 	= TweenValue.tweenValueFromArguments( parameter, mode, expression, end )
 		startValue	:TweenValue._tweenValue 	= TweenValue.tweenValueFromParameter( parameter )
 
-		tweenClass: Type[TweenObject._tween]	  		= getattr( TweenObject, type, TweenObject.startsnap )
+		tweenClass: Type[TweenObject._tween]	 = getattr( TweenObject, type, TweenObject.startsnap )
 
 		tweenOject 	= tweenClass( 
 			parameter, 
