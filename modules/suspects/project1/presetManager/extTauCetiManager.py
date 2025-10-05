@@ -137,7 +137,8 @@ class extTauCetiManager:
 		TDFunctions.arrangeNode( preset_comp )
 
 		#writing stack to preset-table
-		stack_data =  self.stack.Get_Stack_Dict_List() 
+		stack_data =  self.ownerComp.op("callbackManager").Do_Callback("getStack", self.ownerComp) or  self.stack.Get_Stack_Dict_List() 
+		
 		preset_comp.seq.Items.numBlocks = len( stack_data )
 		data_seq = preset_comp.seq.Items
 		for index,item in enumerate( stack_data ):
@@ -159,7 +160,8 @@ class extTauCetiManager:
 		self.ownerComp.op("callbackManager").Do_Callback(	"onPresetRecord", 
 															new_preset.par.Name.eval(), 
 															new_preset.par.Tag.eval(), 
-															new_preset.name)
+															new_preset.name,
+															self.ownerComp)
 		return new_preset
 
 	def _update_preset(self, name, tag,preset_id):
@@ -167,7 +169,8 @@ class extTauCetiManager:
 		self.ownerComp.op("callbackManager").Do_Callback(	"onPresetUpdate", 
 															preset_comp.par.Name.eval(), 
 															preset_comp.par.Tag.eval(), 
-															preset_comp.name)
+															preset_comp.name,
+															self.ownerComp)
 		return preset_comp
 
 	def Remove_Preset(self,preset_id:str ):
@@ -205,7 +208,8 @@ class extTauCetiManager:
 			"onPresetRecall", 
 			preset_comp.par.Name.eval(), 
 			preset_comp.par.Tag.eval(), 
-			preset_comp.name
+			preset_comp.name,
+			self.ownerComp
 		)
 
 		if load_stack: self.Preset_To_Stack( preset_id )
@@ -267,30 +271,6 @@ class extTauCetiManager:
 			self.modeler.List_To_Table( preset_comp.op("values"), 
 										updateData.values() )
 		return
-	
-
-	def Import_V3_Presets(self, path = ""):
-		"""
-			Import the export of an older V3 TauCeti project.
-		"""
-		filepath = path or ui.chooseFile( fileTypes = [".tox"] )
-		if not filepath: return
-		loaded_presets = op("/sys/quiet").loadTox( filepath )
-		for old_preset in loaded_presets.findChildren(depth = 1, type = tableDAT ):
-			name_parts = old_preset.name.split("_")
-			tag = ""
-			if len( name_parts ) > 1: tag = name_parts.pop(0)
-			name = " ".join(name_parts)
-
-			new_preset_id = self.Store_Preset( name, tag = tag )
-	
-			new_preset_comp = self.preset_folder.op( new_preset_id )
-			new_preset_comp.op("values").copy( old_preset )
-			for row in new_preset_comp.op("values").rows():			
-				row[5].val = row[5].val.replace("../../", "../")
-			self.Preset_To_Stack( new_preset_id )
-			self.Recall_Preset( new_preset_id, 0 )
-			self.Store_Preset( name, tag = tag,preset_id = new_preset_id )
 
 	@property
 	def PresetParMenuObject(self):

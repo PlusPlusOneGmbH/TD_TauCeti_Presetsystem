@@ -5,6 +5,18 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
+from typing import TypedDict, Union, Any, Literal, List
+
+class StackElement(TypedDict):
+	Type : Literal["fade", "startsnap", "endsnap"]
+	Preload : bool
+	Value : Union[Any, None]
+	Parname : str
+	Operator : OP
+	Mode : Literal["CONSTANT", "EXPRESSION"]
+	Expression : Union[str, None]
+
+
 import ParUtils
 class InvalidOperator( Exception):
 	pass
@@ -84,21 +96,18 @@ class extParStack:
 		item_block.par.Parname.val = parameter.name
 		item_block.par.Type.val = fade_type if fade_type else self.get_fade_type( parameter )
 	
-	def Get_Stack_Element_Dict(self, index):
+	def Get_Stack_Element_Dict(self, index) -> StackElement:
 		block = self.items[index]
 		parameter = block.par.Parameter.eval()
 		if parameter is None: return self.Remove_Row_From_Stack( index )
 		return {
-			# "id"		: "Deprecated",
 			"Type" 		: block.par.Type.eval(),
 			"Preload" 	: block.par.Preload.eval(),
-			# "par" 		: parameter,
-			"Value" 		: ParUtils.parse( parameter ) if (parameter.mode != ParMode.EXPRESSION) else 0,
+			"Value" 	: ParUtils.parse( parameter ) if (parameter.mode != ParMode.EXPRESSION) else 0,
 			"Parname" 	: block.par.Parname.eval(),
 			"Operator"	: block.par.Operator.eval(),
 			"Mode"		: parameter.mode.name,
 			"Expression": parameter.expr if (parameter.mode == ParMode.EXPRESSION) else None,
-			# "relation"	: self.relation,
 		}
 	
 	def Refresh_Stack(self):
@@ -108,7 +117,7 @@ class extParStack:
 			if element["par"]: self.Add_Par( element["par"] )
 		return
 
-	def Get_Stack_Dict_List(self):
+	def Get_Stack_Dict_List(self) -> List[StackElement]:
 		return [ self.Get_Stack_Element_Dict(index) for index in range(0, self.items.numBlocks)]
 
 	def Remove_Row_From_Stack(self, index):
