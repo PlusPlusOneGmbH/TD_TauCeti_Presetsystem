@@ -1,8 +1,10 @@
+
+
 '''Info Header Start
 Name : ParUtils
-Author : Wieland@AMB-ZEPH15
-Saveorigin : TauCetiV4.toe
-Saveversion : 2022.32660
+Author : Wieland PlusPlusOne@AMB-ZEPH15
+Saveorigin : TauCeti_PresetSystem.toe
+Saveversion : 2023.12000
 Info Header End'''
 
 def bool_parse( parameter ):

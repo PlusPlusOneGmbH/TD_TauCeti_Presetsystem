@@ -1,10 +1,12 @@
 
 
+
+
 '''Info Header Start
 Name : extCuelist
-Author : Wieland@AMB-ZEPH15
-Saveorigin : TauCetiV4.toe
-Saveversion : 2022.35320
+Author : Wieland PlusPlusOne@AMB-ZEPH15
+Saveorigin : TauCeti_PresetSystem.toe
+Saveversion : 2023.12000
 Info Header End'''
 class extCuelist:
 	"""
