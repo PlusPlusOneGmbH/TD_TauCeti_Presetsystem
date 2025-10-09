@@ -1,0 +1,23 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "$id": "https://example.com/product.schema.json",
+ "title": "TouchdesignerConfig",
+ "description": "A dynamic and schemabased jsonConfig for Touchdesigner",
+ "type": "object",
+ "properties": {
+  "Groups": {
+   "description": "",
+   "type": "object",
+   "additionalProperties": {
+    "description": "",
+    "type": "array",
+    "items": {
+     "description": "",
+     "type": [
+      "string"
+     ]
+    }
+   }
+  }
+ }
+}

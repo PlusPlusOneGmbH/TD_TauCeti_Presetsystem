@@ -140,17 +140,15 @@ class extTauCetiManager:
 
 		#writing stack to preset-table
 		stack_data =  self.ownerComp.op("callbackManager").Do_Callback("getStack", self.ownerComp) or  self.stack.Get_Stack_Dict_List() 
-		
+
 		preset_comp.seq.Items.numBlocks = len( stack_data )
 		data_seq = preset_comp.seq.Items
 		for index,item in enumerate( stack_data ):
+			if item is None: continue
 			for key, value in item.items():
 				data_seq[index].par[key] = value
 			pass
-		return preset_id
-	
 
-		# If enabled, we update existing presets with the current stack.
 		if self.ownerComp.par.Pushstacktoallpresets.eval():
 			self.Push_Stack_To_Presets()
 		return preset_id
@@ -185,15 +183,19 @@ class extTauCetiManager:
 		for preset_comp in self.preset_folder.findChildren( depth = 1):
 			preset_comp.destroy()
 
-	def Preset_To_Stack(self,preset_id:str):
+	def Preset_To_Stack(self,preset_id:str):	
 		preset_comp = self.preset_folder.op(preset_id )
 		if not preset_comp: return
 		self.stack.Clear_Stack()
 
-		for target_dict in self.modeler.Table_To_List( preset_comp.op("values") ):
+		for block in preset_comp.seq.Items:
 			try:
-				self.stack.Add_Par( self.stack.Get_Parameter( target_dict["parOwner"], target_dict["parName"] ), 
-								fade_type = target_dict["type"] )
+				self.stack.Add_Par( 
+					block.par.Parameter.eval(),
+					preload = block.par.Preload.eval(),
+					fade_type = block.par.Type.eval()
+				)
+
 			except AttributeError:
 				continue
 
@@ -258,20 +260,22 @@ class extTauCetiManager:
 			Pushes all the parameters of the current stack to all presets.
 			When using "overwrite" mode all parameters will b overwritten. CAUTION!
 		"""
-		stackelements = " ".join( _stackelements ) if isinstance(_stackelements, (list, tuple)) else _stackelements
-		presets = " ".join( _presets ) if isinstance(_presets, (list, tuple)) else _presets
+		raise NotImplementedError()
+		_stack_comp = self.ownerComp.op("Stack_RepoMaker").Repo
+	
+		_preset_comp_dict = { preset_comp.name : preset_comp for preset_comp in self.preset_folder.findChildren( depth = 1, parName = "Name")}
+		_stack_element_dict = { block_item.Parname.eval() : block_item for block_item in _stack_comp}
+		preset_comps = [ _preset_comp_dict[key] for key in tdu.match( _presets, _preset_comp_dict.keys()) ]
+		stack_blocks = [ _stack_element_dict[key] for key in tdu.match( _stackelements, _stack_element_dict.keys()) ]
+		for preset_comp in preset_comps:
+			preset_blocks = {
+				value_block.par.Parameter.eval() : value_block for value_block in preset_comp.seq.Items
+			}
+			for stack_block in stack_blocks:
+				if stack_block.par.Parameter.eval() in preset_blocks and mode != "overwrite": continue
+				# my braid hurst. contunue hiere later...
+				
 
-		_stackData = { stackElement["id"] : stackElement for stackElement in self.stack.Get_Stack_Dict_List() }
-		stackData = { key : _stackData[key] for key in tdu.match( stackelements, list(_stackData.keys()) )}
-		presetNames = tdu.match( presets, [ operator.name for operator in self.preset_folder.findChildren(depth = 1) ] )
-		for presetName in presetNames:
-			preset_comp = self.preset_folder.op( presetName )
-			updateData = { stackElement["id"] : stackElement for stackElement in self.modeler.Table_To_List( preset_comp.op("values") ) }
-			for key, value in stackData.items():
-				if key in updateData and mode == "keep": continue
-				updateData[key] = value
-			self.modeler.List_To_Table( preset_comp.op("values"), 
-										updateData.values() )
 		return
 
 	@property

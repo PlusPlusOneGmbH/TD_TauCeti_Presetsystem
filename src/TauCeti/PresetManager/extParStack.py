@@ -101,7 +101,8 @@ class extParStack:
 	def Get_Stack_Element_Dict(self, index) -> StackElement:
 		block = self.items[index]
 		parameter = block.par.Parameter.eval()
-		if parameter is None: return self.Remove_Row_From_Stack( index )
+		if parameter is None: 
+			return None
 		return {
 			"Type" 		: block.par.Type.eval(),
 			"Preload" 	: block.par.Preload.eval(),
@@ -131,7 +132,9 @@ class extParStack:
 			block.par.Parname.val = ""
 
 	def Clear_Stack(self):
-		self.items.numBlocks = 0
+		self.items.numBlocks = 1
+		for parameter in self.items[0]:
+			parameter.val = parameter.default
 	
 	def Change_Preload(self, index):
 		self.items[index].par.Preload.val = not self.items[index].par.Preload.eval() 
