@@ -1,8 +1,0 @@
-{
-    "Groups": {
-        "Default": [
-            "*"
-        ]
-    },
-    "$schema": "./AC_Group.schema.json"
-}
