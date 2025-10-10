@@ -143,9 +143,10 @@ class extTauCetiManager:
 
 		preset_comp.seq.Items.numBlocks = len( stack_data )
 		data_seq = preset_comp.seq.Items
-		for index,item in enumerate( stack_data ):
+		for index, item in enumerate( stack_data ):
 			if item is None: continue
-			for key, value in item.items():
+			item["Operator"] = self.ownerComp.relativePath( item["Operator"]) if self.ownerComp.par.Pathrelation.eval() == "Relative" else item["Operator"].path
+			for key, value in item.items():	
 				data_seq[index].par[key] = value
 			pass
 
@@ -220,8 +221,12 @@ class extTauCetiManager:
 
 
 		for block in preset_comp.seq.Items:
-			parameter = block.par.Parameter.eval()
-			if parameter is None: 
+			
+			
+			self.ownerComp.par.Evalref.val = block.par.Operator.eval()
+			target_parameter = self.ownerComp.par.Evalref.eval().par[ block.par.Parname.eval() ]
+			
+			if target_parameter is None: 
 				self.logger.Log(
 					"Could not find Parameter stored in Preset", 
 					id, 
@@ -230,7 +235,7 @@ class extTauCetiManager:
 				)
 				continue
 
-			self.tweener.CreateTween(	block.par.Parameter.eval(), 
+			self.tweener.CreateTween(	target_parameter, 
 										block.par.Value.eval(), 
 										time, 
 										type 	= block.par.Type.eval(), 
