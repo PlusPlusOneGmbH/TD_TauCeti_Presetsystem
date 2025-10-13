@@ -9,9 +9,15 @@ Info Header End'''
 
 TDFunctions = op.TDModules.mod.TDFunctions
 import uuid
-from extParStack import InvalidOperator
+from .extParStack import InvalidOperator
 from typing import Literal, Union
 
+from typing import  TYPE_CHECKING, Any
+from td import *
+if TYPE_CHECKING:   
+    from TauCeti.Tweener.extTweener import extTweener
+else:
+    extTweener = Any
 
 def snakeCaseToCamelcase( classObject ):
 	import inspect
@@ -35,12 +41,11 @@ class extTauCetiManager:
 		self.ownerComp 		= ownerComp
 		# self.stack     		= self.ownerComp.ext.extParStack # ????
 		# self.tweener   		= self.ownerComp.op('olib_dependancy').Get_Component()
-		self.tweener 		= self.ownerComp.op("remote_dependency").GetGlobalComponent()
-		self.modeler 		= self.ownerComp.op('modeler')
-		self.preview 		= self.ownerComp.op("previews")
-		self.logger 		= self.ownerComp.op("logger")
-		self.prefab 		= self.ownerComp.op("emptyPreset")
-		self.Record_Preset	= self.Store_Preset
+		self.tweener:extTweener	= self.ownerComp.op("remote_dependency").GetGlobalComponent()
+		self.preview:TOP 		= self.ownerComp.op("previews")
+		self.logger 			= self.ownerComp.op("logger")
+		self.prefab 			= self.ownerComp.op("emptyPreset")
+		self.Record_Preset		= self.Store_Preset
 		self.PresetDoesNotExist = PresetDoesNotExist
 		snakeCaseToCamelcase( self )
 

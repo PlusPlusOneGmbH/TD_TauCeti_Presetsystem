@@ -7,8 +7,11 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
-
-import TweenValue
+from td import *
+if __package__ is None:
+	import TweenValue
+else: 
+	from . import TweenValue
 
 from dataclasses import dataclass, field
 from asyncio import sleep as asyncSleep

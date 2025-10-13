@@ -6,12 +6,23 @@ Author : Wieland PlusPlusOne@AMB-ZEPH15
 Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
-
-import Exceptions
+from td import *
+if __package__ is None:
+    import Exceptions
+else:
+    from . import Exceptions
 
 from functools import lru_cache
 from typing import Union
 from abc import abstractmethod, ABCMeta
+from enum import Enum
+
+# Where does this come from?
+class ParMode(Enum):
+    BIND = "BIND"
+    CONSTANT = "CONSTANT"
+    EXPORT = "EXPORT"
+    EXPRESSION = "EXPRESSION"
 
 par_modes = [parmode.name.upper() for parmode in ParMode._value2member_map_.values()]
 TweenableValue = Union[int, float]

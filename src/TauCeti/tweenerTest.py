@@ -10,8 +10,9 @@ Info Header End'''
 from asyncio import sleep
 from typing import cast, Union, TYPE_CHECKING, Any
 
+# Recommend using the TYPE_CHECKING route here 
 if TYPE_CHECKING:   
-    from suspects.project1.tweener.extTweener import extTweener
+    from TauCeti.Tweener.extTweener import extTweener
 else:
     extTweener = Any
 

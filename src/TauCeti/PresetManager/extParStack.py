@@ -7,7 +7,15 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
-from typing import TypedDict, Union, Any, Literal, List
+
+
+from td import *
+if __package__:
+	from . import ParUtils
+else:
+	import ParUtils
+
+from typing import TypedDict, Union, Any, Literal, List, TYPE_CHECKING
 
 class StackElement(TypedDict):
 	Type : Literal["fade", "startsnap", "endsnap"]
@@ -18,8 +26,7 @@ class StackElement(TypedDict):
 	Mode : Literal["CONSTANT", "EXPRESSION"]
 	Expression : Union[str, None]
 
-
-import ParUtils
+	
 class InvalidOperator( Exception):
 	pass
 

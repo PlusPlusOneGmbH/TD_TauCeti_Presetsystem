@@ -1,8 +1,23 @@
 {
-    "Groups": {
-        "Default": [
-            "*"
-        ]
+    "NamedList": {},
+    "Some_Integer": -2,
+    "Some_String": "foo",
+    "Subdata": {
+        "Sub": 13,
+        "SubDict": {
+            "SubSubValue": "FOOBAR"
+        }
     },
+    "Sublist": [],
+    "Prefilled_Sublist": [
+        "Hello",
+        "WOrld"
+    ],
+    "PositiveValue": 4,
+    "Prefilled_Validated": [
+        1,
+        2,
+        -1
+    ],
     "$schema": "./AC_Group.schema.json"
 }

@@ -10,9 +10,18 @@ Saveorigin : TauCeti_PresetSystem.toe
 Saveversion : 2023.12000
 Info Header End'''
 
-import TweenObject
-import TweenValue
-import Exceptions
+from td import *
+# TD specific import shenaningans.
+if __package__ is None:
+	import TweenObject
+	import TweenValue
+	import Exceptions
+	from TweenValue import TweenableValue
+else:
+	from . import TweenObject
+	from . import TweenValue
+	from . import Exceptions
+	from .TweenValue import TweenableValue
 
 from asyncio import sleep as asyncSleep
 
@@ -28,7 +37,6 @@ def _emptyCallback( value:TweenObject._tween ):
 _type = type
 PotentialCurves = Union[ str, Literal["s", "LinearInterpolation", "QuadraticEaseIn", "QuadraticEaseOut", "BackEaseIn", "BounceEaseIn"] ]
 
-from TweenValue import TweenableValue
 
 
 class AbsoluteTweenDefinition(TypedDict):
