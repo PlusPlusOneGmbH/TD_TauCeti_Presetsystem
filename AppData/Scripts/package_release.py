@@ -1,7 +1,7 @@
  
 search_tag = "package_release_candidate"
 
-for target in root.findChildren( tags = [search_tag]):
+for target in parent.Project.findChildren( tags = [search_tag]):
     
     target.tags.remove(search_tag)
     target.tags.remove( op("PrivateInvestigator").par.Tag.eval() )

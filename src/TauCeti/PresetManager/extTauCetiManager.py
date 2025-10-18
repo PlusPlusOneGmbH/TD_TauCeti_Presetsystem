@@ -55,7 +55,8 @@ def ensure_external(filepath, opshortcut, root_comp = root):
 	newly_loaded.par.savebackup.val 		= False
 	newly_loaded.par.reloadcustom.val 		= False
 	newly_loaded.par.reloadbuiltin.val 		= False
-
+	newly_loaded.par.enableexternaltoxpulse.pulse()
+	
 	return newly_loaded
 
 
