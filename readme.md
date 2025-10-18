@@ -1,6 +1,16 @@
 # TauCeti PresetSystem + Tweener
 Highly customisable and setup agnostic system for presets management in TouchDesigner
 
+## Installation
+Select the correct version from branch and download the toxfiles if needed..
+
+If you already have setup a venv or other way of handling Packages, use ```pip install tdp-TauCeti``` and ```mod.TauCeti.Tweener.ToxFile``` to load the toxfile. 
+
+This will be the future way of disctribution.
+
+## Not on Version
+This project uses SemVer. All releases of a major version will be fully compatible. Minor releases will only add new features. Patches should not change behaviour.
+
 ## Tweener
 The tweener is the heart of the whole system and a great component in itself. It allows for programmatic creation and management of Tweens, transitions between states of a parameter. Be it Expression or Static, fadeable and non-fadeable parameters, the Tweener should be able to handle them.
 
@@ -105,4 +115,16 @@ def callback( tweenObject ):
 tweenObject = op("Tweener").AbsoluteTween( op("level1").par.opacity, 1, 1)
 tweenObject.OnDoneCallbacks.append( callback )
 ```
-## TauCeti: TBD
+## PresetManager
+The presetmanager allows to store and recall state of any arbitrary parameters.
+
+Most operations will use the stack, which is a collection of parameters. To add any parameter to the stack, activate the viewer and add drop the parameter right in.
+
+This video contains most information required for the operation: 
+https://www.youtube.com/watch?v=SSNvsvrnifI
+
+To be added:
+- Data Repository
+- Fademodes
+- Preloading
+- Python API
