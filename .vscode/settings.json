@@ -1,7 +1,0 @@
-{
-    "python.defaultInterpreterPath": "C:\\Program Files\\Derivative\\TouchDesigner.2023.12000\\bin\\python.exe",
-    "python.analysis.extraPaths": [
-        "src",
-        ".venv/Lib/site-packages"
-    ]
-}
