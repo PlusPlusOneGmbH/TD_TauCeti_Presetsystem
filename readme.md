@@ -8,8 +8,16 @@ If you already have setup a venv or other way of handling Packages, use ```pip i
 
 This will be the future way of disctribution.
 
-## Not on Version
+## Note on Versions
 This project uses SemVer. All releases of a major version will be fully compatible. Minor releases will only add new features. Patches should not change behaviour.
+
+## Contributing
+This project is released under the GPL-3.0 license and part of PlusPlusOne FOSS projects.
+Feel free to open pull requests or open issues.
+
+https://github.com/PlusPlusOneGmbH/TD_TauCeti_Presetsystem
+
+
 
 ## Tweener
 The tweener is the heart of the whole system and a great component in itself. It allows for programmatic creation and management of Tweens, transitions between states of a parameter. Be it Expression or Static, fadeable and non-fadeable parameters, the Tweener should be able to handle them.
