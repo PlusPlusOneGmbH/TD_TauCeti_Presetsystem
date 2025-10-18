@@ -4,3 +4,4 @@ Lib
 *__pycache__*
 *.egg-info*
 TDImportCache
+.vscode
