@@ -13,6 +13,8 @@ if __package__ is None:
 else: 
 	from . import TweenValue
 
+
+
 from dataclasses import dataclass, field
 from asyncio import sleep as asyncSleep
 
@@ -104,7 +106,11 @@ class _tween(metaclass = ABCMeta):
 class fade( _tween ):
 	def Step(self, stepsize = None):
 		self._incrementStep(stepsize)
-		curves 				= op("curves_repo").Repo # type: ignore Until I have proper package management this has to be taken for granted.
+
+		curves 				= me.parent.TWEENER.op("curves_repo").Repo # type: ignore Until I have proper package management this has to be taken for granted.
+		# why do I have to do that? This feels strange.
+		# is this because of my hack?
+
 		curve_value 		= curves.GetValue( self._currentStep, self.time, self.interpolation )
 		start_evaluated:float	= self.startValue.eval()
 		target_evaluated:float 	= self.targetValue.eval()
