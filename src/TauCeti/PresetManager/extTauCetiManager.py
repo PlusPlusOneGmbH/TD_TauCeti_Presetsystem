@@ -14,6 +14,7 @@ from typing import Literal, Union
 
 from typing import  TYPE_CHECKING, Any
 from td import *
+
 if TYPE_CHECKING:   
     from TauCeti.Tweener.extTweener import extTweener
 else:
@@ -31,6 +32,34 @@ def snakeCaseToCamelcase( classObject ):
 			)
 
 
+from TauCeti.Tweener import ToxFile as TweenerToxFile
+
+
+# This also is a testbench and will be implemented in a third party package.
+from os import environ
+def ensure_external(filepath, opshortcut, root_comp = root):
+
+	if _potentialy:= getattr(op, opshortcut, None) is not None:
+		return _potentialy
+
+	current_comp = root_comp
+	for path_element in environ.get("ENSURE_UTILITY_PATH", "utils").strip("/ ").split("/"):
+		current_comp = current_comp.op( path_element ) or current_comp.create( baseCOMP, path_element)
+
+	newly_loaded = current_comp.create(baseCOMP, opshortcut)
+	newly_loaded.par.opshortcut.val 		= opshortcut
+	newly_loaded.par.externaltox.val 		= filepath
+	newly_loaded.par.enableexternaltox.val 	= True
+	newly_loaded.par.savebackup.val 		= False
+	newly_loaded.par.reloadcustom.val 		= False
+	newly_loaded.par.reloadbuiltin.val 		= False
+	newly_loaded.par.relpath.menuIndex		= 2
+	# This is not goo behaviour actually. We cannot guarantee that this is the intendet behaviour for all packages.
+	# I do assume, yes but thats what it is, a assumption....
+	newly_loaded.par.enableexternaltoxpulse.pulse()
+	return newly_loaded
+
+
 class PresetDoesNotExist(Exception):
 	pass
 
@@ -41,7 +70,13 @@ class extTauCetiManager:
 		self.ownerComp 		= ownerComp
 		# self.stack     		= self.ownerComp.ext.extParStack # ????
 		# self.tweener   		= self.ownerComp.op('olib_dependancy').Get_Component()
-		self.tweener:extTweener	= self.ownerComp.op("remote_dependency").GetGlobalComponent()
+		try:
+			self.tweener:extTweener	= ensure_external(TweenerToxFile, "TAUCETI_TWEENER")
+		except ModuleNotFoundError:
+			self.tweener:extTweener = self.ownerComp.op("remote_dependency").GetGlobalComponent()
+			# We will use this as a fallback still for folks not using state of the art packagaging technology
+			# brought to you in 3D
+
 		self.preview:TOP 		= self.ownerComp.op("previews")
 		self.logger 			= self.ownerComp.op("logger")
 		self.prefab 			= self.ownerComp.op("emptyPreset")
