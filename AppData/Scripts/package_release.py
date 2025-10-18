@@ -21,6 +21,7 @@ with open("pyproject.toml", "rb") as projecttoml:
     version = projectdata["project"]["version"]
 
 call(f'git checkout -b v{version}')
+call("git add .")
 call(f'git commit . -m "TauCeti Release v{version}" ')
 # call(f'git tag -a v{version} -m "TauCeti Release v{version}"')
 
