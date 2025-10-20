@@ -17,6 +17,8 @@ import tomllib
 with open("pyproject.toml", "rb") as projecttoml:
     projectdata = tomllib.load( projecttoml )
     version = projectdata["project"]["version"]
+
+call("git add .")
 call(f'git commit . -m "Bump to Version {version}"')
 
 # Now lets prepare everything for a clean buildprocess.
