@@ -264,7 +264,11 @@ class extTauCetiManager:
 			
 			
 			self.ownerComp.par.Evalref.val = block.par.Operator.eval()
-			target_parameter = self.ownerComp.par.Evalref.eval().par[ block.par.Parname.eval() ]
+			target_operator = self.ownerComp.par.Evalref.eval()
+			if target_parameter is None: 
+				self.logger.Log( "Target operator is None. Skipping.", self.ownerComp.par.Evalref.val )
+				continue
+			target_parameter = target_operator.par[ block.par.Parname.eval() ]
 			
 			if target_parameter is None: 
 				self.logger.Log(

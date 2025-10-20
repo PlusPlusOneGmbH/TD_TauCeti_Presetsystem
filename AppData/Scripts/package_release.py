@@ -1,10 +1,11 @@
  
 search_tag = "package_release_candidate"
 
-for target in parent.Project.findChildren( tags = [search_tag]):
+for target in parent.Project.findChildren( tags = [search_tag] ):
     
     target.tags.remove(search_tag)
-    target.tags.remove( op("PrivateInvestigator").par.Tag.eval() )
+    for child in list( target.findChildren( tags = op("PrivateInvestigator").par.Tag.eval()) ) + [target]:
+        child.tags.remove( op("PrivateInvestigator").par.Tag.eval() )
     
     prereleasescript = target.op("pre_release")
     if prereleasescript is not None: prereleasescript.run()
@@ -13,7 +14,7 @@ for target in parent.Project.findChildren( tags = [search_tag]):
 
 
 from subprocess import call
-# call("uv version --bump minor")
+call("uv version --bump patch")
 
 import tomllib
 with open("pyproject.toml", "rb") as projecttoml:

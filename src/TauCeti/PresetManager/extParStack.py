@@ -141,7 +141,9 @@ class extParStack:
 	def Clear_Stack(self):
 		self.items.numBlocks = 1
 		for parameter in self.items[0]:
-			parameter.val = parameter.default
+			parameter.reset()
+			
+			#parameter.val = parameter.default
 	
 	def Change_Preload(self, index):
 		self.items[index].par.Preload.val = not self.items[index].par.Preload.eval() 
