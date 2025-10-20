@@ -2,11 +2,27 @@
 Highly customisable and setup agnostic system for presets management in TouchDesigner
 
 ## Installation
-Select the correct version from branch and download the toxfiles if needed..
 
-If you already have setup a venv or other way of handling Packages, use ```pip install tdp-TauCeti``` and ```mod.TauCeti.Tweener.ToxFile``` to load the toxfile. 
+You can download standalone ToxFiles from the the dist-folders of the repository. Choose the specific branch for the correct version.
 
-This will be the future way of disctribution.
+### PIP Installation
+
+This project implements ideas and features of TD_Package, a proposal by PlusPlusOne on how to create shareable components as python packages. This means, you can install this project via PIP and gain access to automated updates and code compleation.
+
+All modules (PresetManager and Tweener) implement the ToxFile member. Refference the ToxFile in the external-parameter of any COMP and force a reload.
+
+```mod.TauCeti.Tweener.ToxFile```
+will return the path to the ToxFile.
+
+For easy code compleation in your IDE use the exported Typying member of the module.
+```python
+from TauCeti.Tweener import Typing as TweenerTyping
+
+tweener_comp:TweenerTyping = op("Tweener")
+```
+Typing is only importing and evaluating during TYPE_CHECKING and evaluates to NONE during runtime.
+
+
 
 ## Note on Versions
 This project uses SemVer. All releases of a major version will be fully compatible. Minor releases will only add new features. Patches should not change behaviour.
@@ -14,10 +30,6 @@ This project uses SemVer. All releases of a major version will be fully compatib
 ## Contributing
 This project is released under the GPL-3.0 license and part of PlusPlusOne FOSS projects.
 Feel free to open pull requests or open issues.
-
-https://github.com/PlusPlusOneGmbH/TD_TauCeti_Presetsystem
-
-
 
 ## Tweener
 The tweener is the heart of the whole system and a great component in itself. It allows for programmatic creation and management of Tweens, transitions between states of a parameter. Be it Expression or Static, fadeable and non-fadeable parameters, the Tweener should be able to handle them.
