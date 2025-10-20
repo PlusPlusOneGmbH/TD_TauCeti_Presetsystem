@@ -11,12 +11,12 @@ for target in release_candidates:
     target.tags.remove(search_tag)
     op("PrivateInvestigator").Release( target )
 
+
+call("uv version --bump patch")
 import tomllib
 with open("pyproject.toml", "rb") as projecttoml:
     projectdata = tomllib.load( projecttoml )
     version = projectdata["project"]["version"]
-
-call("uv version --bump patch")
 call(f'git commit . -m "Bump to Version {version}"')
 
 # Now lets prepare everything for a clean buildprocess.
