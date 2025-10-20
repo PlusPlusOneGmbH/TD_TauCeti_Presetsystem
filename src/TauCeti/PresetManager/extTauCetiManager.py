@@ -31,10 +31,6 @@ def snakeCaseToCamelcase( classObject ):
 				methodObject
 			)
 
-
-from TauCeti.Tweener import ToxFile as TweenerToxFile
-
-
 # This also is a testbench and will be implemented in a third party package.
 from os import environ
 from pathlib import Path
@@ -71,6 +67,7 @@ class extTauCetiManager:
 		# self.stack     		= self.ownerComp.ext.extParStack # ????
 		# self.tweener   		= self.ownerComp.op('olib_dependancy').Get_Component()
 		try:
+			from TauCeti.Tweener import ToxFile as TweenerToxFile
 			self.tweener:extTweener	= ensure_external(TweenerToxFile, "TAUCETI_TWEENER")
 		except ModuleNotFoundError:
 			self.tweener:extTweener = self.ownerComp.op("remote_dependency").GetGlobalComponent()
