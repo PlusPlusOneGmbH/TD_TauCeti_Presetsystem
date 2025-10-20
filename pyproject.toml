@@ -11,6 +11,9 @@ authors = [
 keywords = ["TouchDesigner", "Parameter", "Tweener", "2023.12000"]
 dependencies = []
 
+[project.urls]
+Website = "https://plusplus.one"
+Repository = "https://github.com/PlusPlusOneGmbH/TD_TauCeti_Presetsystem"
 
 [build-system]
 requires = ["setuptools>=61.0"]
