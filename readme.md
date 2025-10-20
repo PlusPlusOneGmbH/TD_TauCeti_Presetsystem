@@ -143,8 +143,21 @@ Most operations will use the stack, which is a collection of parameters. To add 
 This video contains most information required for the operation: 
 https://www.youtube.com/watch?v=SSNvsvrnifI
 
+### DataRepository
+The presetmanager holds all data in so called Repositories: Components that only hold data and do not enact any functionality. These components can be placed outside of the PresetManager, allowing for a seperation of the PresetManager and the dataset, allowing for super easy updates or transition between environments.
+
+### Fademodes
+There are three fademodes. 
+- Startsnap: Will set the value in 0 seconds when the preset gets recalled.
+- Endsnap: Will set the vaue in 0 seconds once the transition to the new preset is done.
+- Fade: Smoothly transition between states. Only for numeric parameters.
+
+### Preloading
+Marks the parameter to be preloadable. A call to the ```Preload( preset_id )``` method of the presetManager will set it to the stored value witout triggering any transition or non marked parameters.
+
+This could be used to set colorvalue before fading in. 
+
+
 To be added:
-- Data Repository
-- Fademodes
-- Preloading
+- Parameter
 - Python API
